@@ -13,6 +13,7 @@ export default function Header() {
   const fetchCategories = useAppStore((state) => state.fetchCategories);
   const searchRecipies = useAppStore((state) => state.searchRecipies);
   const categories = useAppStore((state) => state.categories);
+  const setNotification = useAppStore((state) => state.setNotification);
   useEffect(() => {
     fetchCategories();
   }, []);
@@ -25,8 +26,11 @@ export default function Header() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
-    //TODO : Validar
     if (Object.values(searchFilters).includes("")) {
+      setNotification({
+        error: true,
+        text: "Todos los campos son obligatorios",
+      });
       return;
     }
     //Consultar recetas
