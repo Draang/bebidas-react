@@ -5,6 +5,7 @@ import Layout from "./layouts/Layout";
 //Para mejor performance
 const FavoritesPage = lazy(() => import("./views/FavoritesPage"));
 const IndexPage = lazy(() => import("./views/IndexPage"));
+const GenerateAI = lazy(() => import("./views/GenerateAI"));
 export default function AppRouter() {
   return (
     <BrowserRouter>
@@ -23,6 +24,14 @@ export default function AppRouter() {
             element={
               <Suspense fallback="...Loading">
                 <FavoritesPage />
+              </Suspense>
+            }
+          />
+          <Route
+            path="/generate"
+            element={
+              <Suspense fallback="...Loading">
+                <GenerateAI />
               </Suspense>
             }
           />
