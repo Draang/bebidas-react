@@ -1,10 +1,35 @@
+import { FormEvent } from "react";
+import { useAppStore } from "../stores/useAppStore";
+import Spinner from "../components/Spinner";
+
 export default function GenerateAI() {
+  const setNotification = useAppStore((state) => state.setNotification);
+  const getAIRecipe = useAppStore((state) => state.getAIRecipe);
+  const loading = useAppStore((state) => state.loading);
+  const recipe = useAppStore((state) => state.recipe);
+  const isGenerating = useAppStore((state) => state.isGenerating);
+  async function handleSubmit(
+    event: FormEvent<HTMLFormElement>
+  ): Promise<void> {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const prompt = form.get("prompt") as string;
+    if (prompt.trim() == "") {
+      setNotification({
+        text: "La busqueda no puede estar vacia",
+        error: true,
+      });
+      return;
+    }
+    getAIRecipe(prompt);
+  }
+
   return (
     <>
       <h1 className="text-6xl font-extrabold">Generar Receta con IA</h1>
 
       <div className="max-w-4xl mx-auto">
-        <form onSubmit={() => {}} className="flex flex-col space-y-3 py-10">
+        <form onSubmit={handleSubmit} className="flex flex-col space-y-3 py-10">
           <div className="relative">
             <input
               name="prompt"
@@ -16,6 +41,7 @@ export default function GenerateAI() {
               type="submit"
               aria-label="Enviar"
               className={`cursor-pointer absolute top-1/2 right-5 transform -translate-x-1/2 -translate-y-1/2`}
+              disabled={isGenerating}
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -34,8 +60,9 @@ export default function GenerateAI() {
             </button>
           </div>
         </form>
+        {(loading || isGenerating) && <Spinner />}
 
-        <div className="py-10 whitespace-pre-wrap"></div>
+        <div className="py-10 whitespace-pre-wrap">{recipe}</div>
       </div>
     </>
   );

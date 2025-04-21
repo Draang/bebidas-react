@@ -8,13 +8,15 @@ import {
   createNotificationSlice,
   NotificationSliceType,
 } from "./notificationSlice";
+import { AISlice, createAISlice } from "./aiSlice";
 //Multiples store en slice
 export const useAppStore = create<
-  RecepiesSliceType & FavoritesSliceType & NotificationSliceType
+  RecepiesSliceType & FavoritesSliceType & NotificationSliceType & AISlice
 >()(
   devtools((...a) => ({
     ...createRecepiesSlice(...a),
     ...createFavoritesSlice(...a),
     ...createNotificationSlice(...a),
+    ...createAISlice(...a),
   }))
 );
